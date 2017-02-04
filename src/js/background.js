@@ -106,9 +106,7 @@ function newTab(toUrl) {
 
 function navigate(toUrl, id) {
     if(id) {
-        chrome.tabs.getCurrent(function(tab) {
-            chrome.tabs.update(id, {url: toUrl});
-        });
+        chrome.tabs.update(id, {url: toUrl});
     } else {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             if(tabs.length > 0) {

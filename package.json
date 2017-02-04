@@ -3,11 +3,13 @@
   "version": "0.1.8",
   "description": "Startup page replacement extension for Chrome",
   "main": "content.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-zip": "^4.0.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "publish": "gulp publish"
   },
   "author": "",
   "license": "ISC"
