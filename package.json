@@ -1,6 +1,6 @@
 {
-  "name": "startup-page",
-  "version": "0.1.6",
+  "name": "chrome-startup",
+  "version": "0.1.7",
   "description": "Startup page replacement extension for Chrome",
   "main": "content.js",
   "dependencies": {
