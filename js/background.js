@@ -31,13 +31,22 @@ chrome.runtime.onStartup.addListener(function () {
     init();
 });
 
-chrome.windows.onCreated.addListener(function () {
+chrome.windows.onCreated.addListener(function (w) {
+    if(w.type != "normal") {
+        return;
+    }
+
     chrome.tabs.query({ currentWindow: true }, function (tabs) {
         if(!windowCreate) {
             return;
         }
 
         if(tabs.length == 1) {
+            if(tabs[0].url != 'chrome://newtab/' && tabs[0].url != 'about:newtab') {
+                // prevent other pages than new tab from redirect
+                return;
+            }
+
             navigate(homeUrl, tabs[0].id);
         } else if (tabs.length < 1) {
             newTab(homeUrl);
