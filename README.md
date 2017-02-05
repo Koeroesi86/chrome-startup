@@ -1,2 +1,3 @@
-# Startup page extension for Google Chrome
-https://chrome.google.com/webstore/detail/libiihnjpbdkpeogamlhcjcabhpmhglk
+# ![alt text](https://github.com/Koeroesi86/chrome-startup/raw/master/src/icons/icon-64.png "") [Startup page extension](https://chrome.google.com/webstore/detail/libiihnjpbdkpeogamlhcjcabhpmhglk) for Google Chrome
+
+Replace startup page behaviour for Chrome. If you set the browser to continue where left off, you might lost the option to start with your home page. Using this extension you can do it. just install it, and set your homepage url in it. That's all.
