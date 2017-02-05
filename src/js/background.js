@@ -4,7 +4,8 @@
 
 var homeUrl = 'about:newtab';
 var windowCreate = true;
-chrome.storage.sync.get('url', function(storage) {
+var replaceAllTabs = false;
+chrome.storage.sync.get(['url', 'windowCreate', 'replaceAllTabs'], function(storage) {
     if(storage) {
         if(storage.hasOwnProperty('url')) {
             homeUrl = storage.url;
@@ -12,6 +13,10 @@ chrome.storage.sync.get('url', function(storage) {
 
         if(storage.hasOwnProperty('windowCreate')) {
             windowCreate = storage.windowCreate;
+        }
+
+        if(storage.hasOwnProperty('replaceAllTabs')) {
+            replaceAllTabs = storage.replaceAllTabs;
         }
     }
 });
@@ -25,6 +30,10 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     if(changes.hasOwnProperty('windowCreate')) {
         windowCreate = changes.windowCreate;
     }
+
+    if(storage.hasOwnProperty('replaceAllTabs')) {
+        replaceAllTabs = storage.replaceAllTabs;
+    }
 });
 
 chrome.runtime.onStartup.addListener(function () {
@@ -37,21 +46,33 @@ chrome.windows.onCreated.addListener(function (w) {
     }
 
     chrome.tabs.query({ currentWindow: true }, function (tabs) {
-        if(!windowCreate) {
+        if(!windowCreate && !replaceAllTabs) {
             return;
         }
 
         if(tabs.length == 1) {
-            if(tabs[0].url != 'chrome://newtab/' && tabs[0].url != 'about:newtab') {
+            var tab = tabs[0];
+            if(tab.url != 'chrome://newtab/' && tab.url != 'about:newtab') {
                 // prevent other pages than new tab from redirect
                 return;
             }
 
-            navigate(homeUrl, tabs[0].id);
+            navigate(homeUrl, tab.id);
         } else if (tabs.length < 1) {
             newTab(homeUrl);
         }
     });
+});
+
+chrome.tabs.onCreated.addListener(function (tab) {
+    setTimeout(function () {
+        if(tab.url != 'chrome://newtab/' && tab.url != 'about:newtab') {
+            // prevent other pages than new tab from redirect
+            return;
+        }
+
+        navigate(homeUrl, tab.id);
+    }, 10);
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender) {
@@ -92,10 +113,9 @@ function init() {
 
             if (tabsCount == 1) {
                 navigate(homeUrl, foundTabs[0].id);
-                return;
+            } else if (tabsCount == 0) {
+                navigate(homeUrl);
             }
-
-            navigate(homeUrl);
         }
     });
 }

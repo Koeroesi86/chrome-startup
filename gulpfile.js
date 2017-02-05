@@ -4,12 +4,12 @@
 
 var gulp = require('gulp');
 var zip = require('gulp-zip');
-var pjson = require('./package.json');
+var manifest = require('./src/manifest.json');
 
 gulp.task('default', ['publish']);
 
 gulp.task('publish', function () {
     gulp.src('src/**/*')
-        .pipe(zip('startup-'+pjson.version+'.zip'))
+        .pipe(zip('startup-'+manifest.version+'.zip'))
         .pipe(gulp.dest('dist'));
 });
