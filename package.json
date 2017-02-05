@@ -1,6 +1,6 @@
 {
   "name": "chrome-startup",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Startup page replacement extension for Chrome",
   "main": "content.js",
   "dependencies": {},
@@ -9,7 +9,7 @@
     "gulp-zip": "^4.0.0"
   },
   "scripts": {
-    "publish": "gulp publish"
+    "publish": "gulp"
   },
   "author": "",
   "license": "ISC"
