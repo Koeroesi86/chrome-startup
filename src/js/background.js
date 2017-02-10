@@ -85,7 +85,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 chrome.contextMenus.create({
     "type":"normal",
-    "title":"Open on new tab",
+    "title": chrome.i18n.getMessage("contextMenuNewTab"),
     "contexts":[
         "browser_action"
     ],

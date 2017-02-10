@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Startup page</title>
+    <title></title>
     <link rel="stylesheet" href="options.css">
 </head>
 <body>
-    <label for="url">
-        Enter Start Page URL:
-    </label>
+    <label for="url" id="label_url"></label>
     <input type="text" id="url">
     <label for="windowCreate">
         <input type="checkbox" id="windowCreate">
-        Redirect new windows
+        <span id="label_windowCreate"></span>
     </label>
     <label for="replaceAllTabs">
         <input type="checkbox" id="replaceAllTabs">
-        Replace new tab page completely
+        <span id="label_replaceAllTabs"></span>
     </label>
-    <div id="status"></div>
-    <button id="save">Save</button>
+    <div id="statusText"></div>
+    <button id="saveButton"></button>
     <script src="options.js"></script>
 </body>
 </html>

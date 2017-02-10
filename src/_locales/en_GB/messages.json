@@ -1,0 +1,31 @@
+{
+  "extensionName": {
+    "message": "Startup page"
+  },
+  "contextMenuNewTab": {
+    "message": "Open on new tab",
+    "description": "Text to show in icon context menu to open on new tab"
+  },
+  "label_url": {
+    "message": "Enter Start Page URL:"
+  },
+  "label_windowCreate": {
+    "message": "Redirect new windows"
+  },
+  "label_replaceAllTabs": {
+    "message": "Replace new tab page completely"
+  },
+  "saveButton": {
+    "message": "Save"
+  },
+  "statusText": {
+    "message": "Start Page saved: $url$",
+    "description": "Status text when options updated",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "about:newtab"
+      }
+    }
+  }
+}

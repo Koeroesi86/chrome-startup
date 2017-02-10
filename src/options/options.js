@@ -8,11 +8,11 @@ function saveOptions() {
         replaceAllTabs: replaceAllTabs
     }, function() {
         // Update status to let user know options were saved.
-        var status = document.getElementById('status');
-        status.textContent = 'Start Page saved: ' + url;
-        setTimeout(function() {
-            // status.textContent = '';
-        }, 750);
+        var status = document.getElementById('statusText');
+        status.textContent = chrome.i18n.getMessage("statusText", url);
+        // setTimeout(function() {
+        //     status.textContent = '';
+        // }, 750);
     });
 }
 
@@ -46,8 +46,17 @@ function toggleNewTab(e) {
 function initialize() {
     restoreOptions();
 
-    document.getElementById('save').addEventListener('click', saveOptions);
+    document.getElementById('saveButton').addEventListener('click', saveOptions);
     document.getElementById('replaceAllTabs').addEventListener('change', toggleNewTab);
+    loadLocale();
+}
+
+function loadLocale() {
+    document.title = chrome.i18n.getMessage("extensionName");
+    document.getElementById('label_url').textContent = chrome.i18n.getMessage("label_url");
+    document.getElementById('label_windowCreate').textContent = chrome.i18n.getMessage("label_windowCreate");
+    document.getElementById('label_replaceAllTabs').textContent = chrome.i18n.getMessage("label_replaceAllTabs");
+    document.getElementById('saveButton').textContent = chrome.i18n.getMessage("saveButton");
 }
 
 document.addEventListener('DOMContentLoaded', initialize);
