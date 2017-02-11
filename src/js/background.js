@@ -2,9 +2,12 @@
  * Created by Chris on 29/01/2017.
  */
 
+//defaults
 var homeUrl = 'about:newtab';
 var windowCreate = true;
 var replaceAllTabs = false;
+
+//load settings
 chrome.storage.sync.get(['url', 'windowCreate', 'replaceAllTabs'], function(storage) {
     if(storage) {
         if(storage.hasOwnProperty('url')) {
@@ -36,10 +39,16 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     }
 });
 
+//startup
 chrome.runtime.onStartup.addListener(function () {
     init();
 });
 
+setTimeout(function () { //add timeout to run as a fallback of not firing onStartup
+    init();
+}, 10);
+
+//window creation
 chrome.windows.onCreated.addListener(function (w) {
     if(w.type != "normal") {
         return;
@@ -64,25 +73,22 @@ chrome.windows.onCreated.addListener(function (w) {
     });
 });
 
+//tab opening
 chrome.tabs.onCreated.addListener(function (tab) {
-    setTimeout(function () {
-        if(tab.url != 'chrome://newtab/' && tab.url != 'about:newtab') {
-            // prevent other pages than new tab from redirect
-            return;
-        }
-
-        navigate(homeUrl, tab.id);
-    }, 10);
+    if(['chrome://newtab/', 'about:newtab', 'about:blank', '', homeUrl].indexOf(tab.url) == -1) {
+        // prevent other pages than new tab from redirect
+        return;
+    }
+    navigate(homeUrl, tab.id);
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender) {
-    navigate(homeUrl);
-});
-
+//extension icon click
+//TODO: middle click
 chrome.browserAction.onClicked.addListener(function(tab) {
     navigate(homeUrl, tab.id);
 });
 
+//context menu
 chrome.contextMenus.create({
     "type":"normal",
     "title": chrome.i18n.getMessage("contextMenuNewTab"),
@@ -94,9 +100,10 @@ chrome.contextMenus.create({
     }
 });
 
-setTimeout(function () { //add timeout to run as a fallback of not firing onStartup
-    init();
-}, 10);
+//message subscription for later use
+chrome.runtime.onMessage.addListener(function(request, sender) {
+    navigate(homeUrl);
+});
 
 function init() {
     chrome.tabs.query({}, function(foundTabs) {
