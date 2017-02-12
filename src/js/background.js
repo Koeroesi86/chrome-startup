@@ -75,7 +75,7 @@ chrome.windows.onCreated.addListener(function (w) {
 
 //tab opening
 chrome.tabs.onCreated.addListener(function (tab) {
-    if(['chrome://newtab/', 'about:newtab', 'about:blank', '', homeUrl].indexOf(tab.url) == -1) {
+    if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(tab.url) == -1) {
         // prevent other pages than new tab from redirect
         return;
     }
