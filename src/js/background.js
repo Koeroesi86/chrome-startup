@@ -50,7 +50,7 @@ setTimeout(function () { //add timeout to run as a fallback of not firing onStar
 
 //window creation
 chrome.windows.onCreated.addListener(function (w) {
-    if(w.type != "normal") {
+    if(w.type !== "normal") {
         return;
     }
 
@@ -59,9 +59,9 @@ chrome.windows.onCreated.addListener(function (w) {
             return;
         }
 
-        if(tabs.length == 1) {
+        if(tabs.length === 1) {
             var tab = tabs[0];
-            if(tab.url != 'chrome://newtab/' && tab.url != 'about:newtab') {
+            if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(tab.url) === -1) {
                 // prevent other pages than new tab from redirect
                 return;
             }
@@ -75,7 +75,7 @@ chrome.windows.onCreated.addListener(function (w) {
 
 //tab opening
 chrome.tabs.onCreated.addListener(function (tab) {
-    if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(tab.url) == -1) {
+    if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(tab.url) === -1 || !replaceAllTabs) {
         // prevent other pages than new tab from redirect
         return;
     }
@@ -106,21 +106,42 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 });
 
 function init() {
+    //Fix for mac users
+    chrome.runtime.getPlatformInfo(function (info) {
+        if (info.os === 'mac') {
+            chrome.extension.isAllowedFileSchemeAccess(function (isAllowedFileSchemeAccess) {
+                if (isAllowedFileSchemeAccess) {
+                    // Great, we've got access
+                    return;
+                }
+                var url = 'chrome://extensions/?id=' + chrome.runtime.id;
+                chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+                    if (tabs.length > 0) {
+                        if (tabs[0].url !== url) {
+                            alert('Please allow access to file URLs in the following screen.');
+
+                            newTab(url);
+                        }
+                    }
+                }); //chrome.tabs.query
+            }); //chrome.extension.isAllowedFileSchemeAccess
+        }
+    }); //chrome.runtime.getPlatformInfo
     chrome.tabs.query({}, function(foundTabs) {
         var tabsCount = foundTabs.length;
         if(tabsCount <= 1) {
             for(var i in foundTabs) {
                 if(foundTabs.hasOwnProperty(i)) {
-                    if(foundTabs[i].url != 'chrome://newtab/' && foundTabs[i].url != 'about:newtab') {
+                    if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(foundTabs[i].url) === -1) {
                         // prevent other pages than new tab from redirect
                         return;
                     }
                 }
             }
 
-            if (tabsCount == 1) {
+            if (tabsCount === 1) {
                 navigate(homeUrl, foundTabs[0].id);
-            } else if (tabsCount == 0) {
+            } else if (tabsCount === 0) {
                 navigate(homeUrl);
             }
         }
