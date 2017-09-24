@@ -129,10 +129,12 @@ function init() {
     }); //chrome.runtime.getPlatformInfo
     chrome.tabs.query({}, function(foundTabs) {
         var tabsCount = foundTabs.length;
+        var regex = /^chrome|about/i;
         if(tabsCount <= 1) {
             for(var i in foundTabs) {
                 if(foundTabs.hasOwnProperty(i)) {
-                    if(['chrome://newtab/', 'about:newtab', 'about:blank', homeUrl].indexOf(foundTabs[i].url) === -1) {
+                    var currentUrl = foundTabs[i].url || "";
+                    if(!regex.test(currentUrl) && currentUrl !== homeUrl) {
                         // prevent other pages than new tab from redirect
                         return;
                     }
